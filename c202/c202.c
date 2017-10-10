@@ -61,7 +61,13 @@ void stackInit ( tStack* s ) {
 ** předpokládejte, že tato situace nenastane. 
 */
 
-	  solved = 0;                      /* V případě řešení, smažte tento řádek! */
+	if (s == NULL) {
+		stackError(SERR_INIT);
+		return;
+	}
+	s->top = -1;
+
+//	solved = 0;                      /* V případě řešení, smažte tento řádek! */
 }
 
 int stackEmpty ( const tStack* s ) {
@@ -71,7 +77,9 @@ int stackEmpty ( const tStack* s ) {
 ** typu "if ( true ) b=true else b=false".
 */
 
-	  solved = 0;                      /* V případě řešení, smažte tento řádek! */
+	return (s->top == -1);
+
+//	  solved = 0;                      /* V případě řešení, smažte tento řádek! */
 }
 
 int stackFull ( const tStack* s ) {
@@ -84,7 +92,9 @@ int stackFull ( const tStack* s ) {
 ** Funkci implementujte jako jediný příkaz.
 */
 
-	  solved = 0;                      /* V případě řešení, smažte tento řádek! */
+	return (s->top == STACK_SIZE-1);
+
+//	solved = 0;                      /* V případě řešení, smažte tento řádek! */
 }
 
 void stackTop ( const tStack* s, char* c ) {
@@ -98,7 +108,13 @@ void stackTop ( const tStack* s, char* c ) {
 ** funkci stackEmpty.
 */
 
-	  solved = 0;                      /* V případě řešení, smažte tento řádek! */
+	if (stackEmpty(s)) {
+		stackError(SERR_TOP);
+		return;
+	}
+	*c = s->arr[s->top];
+
+//	solved = 0;                      /* V případě řešení, smažte tento řádek! */
 }
 
 
@@ -115,7 +131,11 @@ void stackPop ( tStack* s ) {
 ** 
 */
 
-	  solved = 0;                      /* V případě řešení, smažte tento řádek! */
+	if (!stackEmpty(s)) {
+		s->top = s->top - 1;
+	}
+
+//	  solved = 0;                      /* V případě řešení, smažte tento řádek! */
 }
 
 
@@ -128,7 +148,15 @@ void stackPush ( tStack* s, char c ) {
 ** funkci stackFull.
 */
 
-	  solved = 0;                      /* V případě řešení, smažte tento řádek! */
+	if (stackFull(s)) {
+		stackError(SERR_PUSH);
+	}
+	else {
+		s->top = s->top + 1;
+		s->arr[s->top] = c;
+	}
+
+//	solved = 0;                      /* V případě řešení, smažte tento řádek! */
 }
 
 /* Konec c202.c */
