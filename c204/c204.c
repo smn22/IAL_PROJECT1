@@ -49,7 +49,12 @@ int solved;
 ** nadeklarovat a používat pomocnou proměnnou typu char.
 */
 void untilLeftPar ( tStack* s, char* postExpr, unsigned* postLen ) {
-
+    char c;
+    while (!stackEmpty(s) && ( c = s->arr[s->top] != '(' )) {
+        postExpr[*postLen] = c;
+        *postLen = *postLen + 1;
+        stackPop(s);
+    }
 }
 
 /*
