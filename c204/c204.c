@@ -32,6 +32,7 @@
 **/
 
 #include "c204.h"
+#include "../c202/c202.h"
 
 int solved;
 
@@ -50,11 +51,19 @@ int solved;
 */
 void untilLeftPar ( tStack* s, char* postExpr, unsigned* postLen ) {
     char c;
-    while (!stackEmpty(s) && ( c = s->arr[s->top] != '(' )) {
+    while ( !stackEmpty(s) && ((c = s->arr[s->top]) != '(') ) {
         postExpr[*postLen] = c;
         *postLen = *postLen + 1;
         stackPop(s);
     }
+
+    // odstraneni zbyle zavorky
+    if (s->arr[s->top] == '(') {
+        postExpr[*postLen] = c;
+        *postLen = *postLen + 1;
+        stackPop(s);
+    }
+
 }
 
 /*
@@ -68,7 +77,34 @@ void untilLeftPar ( tStack* s, char* postExpr, unsigned* postLen ) {
 ** představuje parametr postLen, výstupním polem znaků je opět postExpr.
 */
 void doOperation ( tStack* s, char c, char* postExpr, unsigned* postLen ) {
+    char sTop;
 
+    // pokud je zasobnik prazdny: vloz operator na vrchol zasobniku
+    if (stackEmpty(s)) {
+        stackPush(s, c); // vloz operator na stack
+        return;
+    }
+    else { // pokud je na vrcholu zasobniku leva zavorka: vloz operator na vrchol zasobniku
+        stackTop(s, &sTop); // nacteni hodnoty vrcholu zasobniku
+        if (sTop == '(') {
+            stackPush(s, c);
+            return;
+        }
+    }
+
+    // pokud je na vrcholu zasobniku operator s nizsi prioritou: vloz operator na vrchol zasobniku
+    if ( (sTop == '+' || sTop == '-') && (c == '*' || c == '/') ) {
+        stackPush(s, c);
+        return;
+    }
+    else { // pokud je na vrcholu zasobniku oprator s vyssi nebo shodnou prioritou: odstraneni operatoru se zasobniku a vlozeni na konec vystupniho retezce
+        postExpr[*postLen] = sTop; // vlozeni operatoru na konec vystupniho retezce
+        *postLen = *postLen + 1;
+
+        stackPop(s); // odstraneni znaku z vrcholu zasobniku
+
+        doOperation(s, c, postExpr, postLen);
+    }
 }
 
 /* 
@@ -116,8 +152,46 @@ void doOperation ( tStack* s, char c, char* postExpr, unsigned* postLen ) {
 ** řetězce konstantu NULL.
 */
 char* infix2postfix (const char* infExpr) {
+    tStack s;
+    stackInit(&s);
 
-  solved = 0;                        /* V případě řešení smažte tento řádek! */
+    char *postExpr = malloc(MAX_LEN * sizeof(char)); // alokace pameti pro vystupni retezec
+    char c; // aktualni znak cteneho retezce
+    unsigned int i = 0; // index aktualniho znaku cteneho retezce
+
+    while ( (c = infExpr[i]) != '\0' ) {
+        printf("|postExpt:%s| \n", postExpr);
+        // operand
+        if ( (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ) {
+            postExpr[i] = c; // pridani operandu na konec vystupniho retezce
+            i++;
+        }
+        else if (c == '(') { // leva zavorka
+            stackPush(&s, '(');
+        }
+        else if (c == '+' || c == '-' || c == '*' || c == '/') { // operator
+            doOperation(&s, c, postExpr, &i);
+        }
+        else if (c == ')') { // prava zavorka
+            untilLeftPar(&s, postExpr, &i);
+        }
+        else if (c == '=') { // omezovac
+            // dokud neni zasobnik prazdny
+            while (!stackEmpty(&s)) {
+                stackTop(&s, &postExpr[i]); // pridani znaku ze zasobniku na konec vysledneho retezce
+                stackPop(&s); // odstraneni vrchniho znaku ze zasobniku
+                i++;
+            }
+            postExpr[i] = '=';
+            postExpr[i+1] = '\0';
+        }
+
+        i++; // posunuti indexu cteneho retezce
+    }
+
+    return postExpr;
+
+//  solved = 0;                        /* V případě řešení smažte tento řádek! */
   return NULL;                /* V případě řešení můžete smazat tento řádek. */
 }
 

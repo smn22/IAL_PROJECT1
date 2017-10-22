@@ -110,7 +110,7 @@ void DLInsertFirst (tDLList *L, int val) {
 
     // vytvoreni noveho prku + alokovani pameti pro novy prvek
     tDLElemPtr newElem;
-    if( (newElem = malloc(sizeof(int))) == NULL ) {
+    if( (newElem = malloc(sizeof(struct tDLElem))) == NULL ) {
         DLError();
         return;
     }
@@ -141,7 +141,7 @@ void DLInsertLast(tDLList *L, int val) {
 
     // vytvoreni noveho prku + alokovani pameti pro novy prvek
     tDLElemPtr newElem;
-    if( (newElem = malloc(sizeof(int))) == NULL ) {
+    if( (newElem = malloc(sizeof(struct tDLElem))) == NULL ) {
         DLError();
         return;
     }
@@ -322,7 +322,7 @@ void DLPostInsert (tDLList *L, int val) {
     if (L->Act) {
         // vytvoreni noveho prku + alokovani pameti pro novy prvek
         tDLElemPtr newElem;
-        if( (newElem = malloc(sizeof(int))) == NULL ) {
+        if( (newElem = malloc(sizeof(struct tDLElem))) == NULL ) {
             DLError();
             return;
         }
@@ -358,7 +358,7 @@ void DLPreInsert (tDLList *L, int val) {
     if (L->Act) {
         // vytvoreni noveho prku + alokovani pameti pro novy prvek
         tDLElemPtr newElem;
-        if( (newElem = malloc(sizeof(int))) == NULL ) {
+        if( (newElem = malloc(sizeof(struct tDLElem))) == NULL ) {
             DLError();
             return;
         }

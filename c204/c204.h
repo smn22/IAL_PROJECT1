@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "c202.h"                          /* využívá příklad c202 - zásobník */
+#include "../c202/c202.h"                          /* využívá příklad c202 - zásobník */
 
 #define MAX_LEN 64                          /* maximální délka řetězce výrazu */
 
