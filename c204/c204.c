@@ -32,7 +32,6 @@
 **/
 
 #include "c204.h"
-#include "../c202/c202.h"
 
 int solved;
 
@@ -57,10 +56,8 @@ void untilLeftPar ( tStack* s, char* postExpr, unsigned* postLen ) {
         stackPop(s);
     }
 
-    // odstraneni zbyle zavorky
+    // odstraneni zbyle leve zavorky ze zasobniku
     if (s->arr[s->top] == '(') {
-        postExpr[*postLen] = c;
-        *postLen = *postLen + 1;
         stackPop(s);
     }
 
@@ -155,41 +152,41 @@ char* infix2postfix (const char* infExpr) {
     tStack s;
     stackInit(&s);
 
-    char *postExpr = malloc(MAX_LEN * sizeof(char)); // alokace pameti pro vystupni retezec
+    char *postfExpr = malloc(MAX_LEN * sizeof(char)); // alokace pameti pro vystupni retezec
     char c; // aktualni znak cteneho retezce
     unsigned int i = 0; // index aktualniho znaku cteneho retezce
+    unsigned int postfIndex = 0; // index pro zapis postExpr
 
     while ( (c = infExpr[i]) != '\0' ) {
-        printf("|postExpt:%s| \n", postExpr);
         // operand
         if ( (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ) {
-            postExpr[i] = c; // pridani operandu na konec vystupniho retezce
-            i++;
+            postfExpr[postfIndex] = c; // pridani operandu na konec vystupniho retezce
+            postfIndex++;
         }
         else if (c == '(') { // leva zavorka
             stackPush(&s, '(');
         }
         else if (c == '+' || c == '-' || c == '*' || c == '/') { // operator
-            doOperation(&s, c, postExpr, &i);
+            doOperation(&s, c, postfExpr, &postfIndex);
         }
         else if (c == ')') { // prava zavorka
-            untilLeftPar(&s, postExpr, &i);
+            untilLeftPar(&s, postfExpr, &postfIndex);
         }
         else if (c == '=') { // omezovac
             // dokud neni zasobnik prazdny
             while (!stackEmpty(&s)) {
-                stackTop(&s, &postExpr[i]); // pridani znaku ze zasobniku na konec vysledneho retezce
+                stackTop(&s, &postfExpr[postfIndex]); // pridani znaku ze zasobniku na konec vysledneho retezce
                 stackPop(&s); // odstraneni vrchniho znaku ze zasobniku
-                i++;
+                postfIndex++;
             }
-            postExpr[i] = '=';
-            postExpr[i+1] = '\0';
+            postfExpr[postfIndex] = '=';
+            postfExpr[postfIndex+1] = '\0';
         }
 
         i++; // posunuti indexu cteneho retezce
     }
 
-    return postExpr;
+    return postfExpr;
 
 //  solved = 0;                        /* V případě řešení smažte tento řádek! */
   return NULL;                /* V případě řešení můžete smazat tento řádek. */

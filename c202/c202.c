@@ -60,7 +60,7 @@ void stackInit ( tStack* s ) {
 ** volejte funkci stackError(SERR_INIT). U ostatních funkcí pro zjednodušení
 ** předpokládejte, že tato situace nenastane. 
 */
-
+    // kontrola platneho ukazatel na zasobnik
 	if (s == NULL) {
 		stackError(SERR_INIT);
 		return;
@@ -108,10 +108,12 @@ void stackTop ( const tStack* s, char* c ) {
 ** funkci stackEmpty.
 */
 
+    // kontrola jestli je zasobnik prazdny
 	if (stackEmpty(s)) {
 		stackError(SERR_TOP);
 		return;
 	}
+    // vrati znak z vrcholu zasobniku
 	*c = s->arr[s->top];
 
 //	solved = 0;                      /* V případě řešení, smažte tento řádek! */
@@ -130,8 +132,9 @@ void stackPop ( tStack* s ) {
 ** jednoduchost neděláme.
 ** 
 */
-
+    // pokud neni zasobnik prazdny
 	if (!stackEmpty(s)) {
+        // snizi vrchol zasobniku
 		s->top = s->top - 1;
 	}
 
@@ -148,10 +151,12 @@ void stackPush ( tStack* s, char c ) {
 ** funkci stackFull.
 */
 
+    // pokud je zasobnik plny: chyba
 	if (stackFull(s)) {
 		stackError(SERR_PUSH);
 	}
 	else {
+        // vlozeni znaku na zasobnik
 		s->top = s->top + 1;
 		s->arr[s->top] = c;
 	}

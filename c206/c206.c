@@ -76,6 +76,7 @@ void DLInitList (tDLList *L) {
 ** že neinicializované proměnné mají nedefinovanou hodnotu.
 **/
 
+    // pocatecni ukazatele jsou NULL
     L->First = NULL;
     L->Last = NULL;
     L->Act = NULL;
@@ -90,7 +91,7 @@ void DLDisposeList (tDLList *L) {
 ** uvolněny voláním operace free. 
 **/
     tDLElemPtr elemToDelete;
-    // dokud neni seznam prazdny: maz posledni prvek
+    // dokud neni seznam prazdny: mazani posledniho prvku
     while ( (elemToDelete = L->Last) != NULL) {
         L->Last = elemToDelete->lptr; // poslednim prvkem se stane predposledni prvek
         elemToDelete->lptr = elemToDelete->rptr = NULL;
@@ -406,7 +407,9 @@ void DLActualize (tDLList *L, int val) {
 ** Pokud seznam L není aktivní, nedělá nic.
 **/
 
+    // pokud je seznam aktivni
     if (L->Act) {
+        // aktualizuj data
         L->Act->data = val;
     }
 	
@@ -436,7 +439,9 @@ void DLPred (tDLList *L) {
 ** Všimněte si, že při aktivitě na prvním prvku se seznam stane neaktivním.
 **/
 
+    // pokud je seznam aktivni
     if (L->Act) {
+        // posune aktivitu na dalsi prvek
         L->Act = L->Act->lptr;
     }
 	
