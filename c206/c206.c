@@ -81,7 +81,7 @@ void DLInitList (tDLList *L) {
     L->Last = NULL;
     L->Act = NULL;
 
-solved = FALSE;                   /* V případě řešení, smažte tento řádek! */
+//solved = FALSE;                   /* V případě řešení, smažte tento řádek! */
 }
 
 void DLDisposeList (tDLList *L) {
@@ -100,7 +100,7 @@ void DLDisposeList (tDLList *L) {
     }
     L->Last = L->First = L->Act = NULL;
 
- solved = FALSE;                   /* V případě řešení, smažte tento řádek! */
+// solved = FALSE;                   /* V případě řešení, smažte tento řádek! */
 }
 
 void DLInsertFirst (tDLList *L, int val) {
