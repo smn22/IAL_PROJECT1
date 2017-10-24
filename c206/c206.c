@@ -116,12 +116,12 @@ void DLInsertFirst (tDLList *L, int val) {
         DLError();
         return;
     }
+    newElem->data = val;
 
     // pokud byl seznam prazdny: pripojeni noveho prvku na zacatek
     if (L->First == NULL) {
         L->First = newElem;
         L->Last = newElem;
-        newElem->data = val;
         newElem->lptr = NULL;
         newElem->rptr = NULL;
     }
@@ -130,7 +130,7 @@ void DLInsertFirst (tDLList *L, int val) {
         L->First = newElem;
         newElem->lptr = NULL;
         newElem->rptr = elemToJoin;
-        newElem->data = val;
+        elemToJoin->lptr = newElem;
     }
 
 //    solved = FALSE;                   /* V případě řešení, smažte tento řádek! */
@@ -149,12 +149,12 @@ void DLInsertLast(tDLList *L, int val) {
         DLError();
         return;
     }
+    newElem->data = val;
 
     // pokud byl seznam prazdny: pripojeni noveho prvku na zacatek
     if (L->First == NULL) {
         L->First = newElem;
         L->Last = newElem;
-        newElem->data = val;
         newElem->lptr = NULL;
         newElem->rptr = NULL;
     }
@@ -162,7 +162,6 @@ void DLInsertLast(tDLList *L, int val) {
         L->Last->rptr = newElem;
         newElem->lptr = L->Last;
         newElem->rptr = NULL;
-        newElem->data = val;
         L->Last = newElem;
     }
 	
